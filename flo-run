@@ -13,10 +13,10 @@ from florun.flow import FlowError
 
 
 def showversion():
-    print _("""%(__title__)s version %(__version__)s
+    print(_("""%(__title__)s version %(__version__)s
 %(__copyright__)s by %(__author__)s, %(__credits__)s
 
-%(__license__)s""") % florun.__dict__
+%(__license__)s""") % florun.__dict__)
 
 
 def main(prefix):
@@ -28,7 +28,7 @@ def main(prefix):
         florun.icons_dir  = os.path.join(prefix, 'share', 'florun', 'icons')
 
     # Set up the path to translation files
-    gettext.install('florun', florun.locale_dir, unicode=True)
+    gettext.install('florun', florun.locale_dir)
     florun._ = _
 
     # Parse command-line arguments
@@ -104,10 +104,10 @@ def main(prefix):
                     node.options = options
             runner = florun.flow.Runner(wf)
             runner.start()
-        except FlowError, e:
+        except FlowError as e:
             florun.flow.logger.exception(e)
             return 1
-        except KeyboardInterrupt, e:
+        except KeyboardInterrupt as e:
             florun.flow.logger.error(_("Interrupted by user"))
             return 2
     else:

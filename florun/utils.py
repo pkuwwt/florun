@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 import os
-import cStringIO
+from io import StringIO
 import traceback
 
 
@@ -47,7 +47,7 @@ def groupby(list, attribute):
 
 
 def traceback2str(tracebackobj):
-    tbinfofile = cStringIO.StringIO()
+    tbinfofile = StringIO()
     traceback.print_tb(tracebackobj, None, tbinfofile)
     tbinfofile.seek(0)
     tbinfo = tbinfofile.read()

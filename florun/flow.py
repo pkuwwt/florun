@@ -10,7 +10,7 @@ import tempfile
 from gettext import gettext as _
 
 import florun
-from utils import empty, atoi, import_plugins
+from .utils import empty, atoi, import_plugins
 
 
 logger = logging.getLogger(__name__)
@@ -90,7 +90,7 @@ class Flow(object):
                 raise FlowError(_("A node with id '%s' already exists.") % node.id)
             else:
                 node.id = self.randomId(node)
-        except NodeNotFoundError, e:
+        except NodeNotFoundError as e:
             pass
         self.modified = True
         node.flow = self
@@ -184,8 +184,8 @@ class Flow(object):
                 if len(n.successors) > 0:
                     setincidence(n.successors, level + 1)
         setincidence(self.startNodes, 1)
-        self.nodes.sort(cmp=lambda x, y: cmp(x.id, y.id))
-        self.nodes.sort(cmp=lambda x, y: cmp(x.incidence, y.incidence))
+        self.nodes.sort(key=lambda x: x.id)
+        self.nodes.sort(key=lambda x: x.incidence)
 
     @classmethod
     def importXml(cls, xmlcontent):
@@ -253,8 +253,8 @@ class Flow(object):
         # Each node...
         for node in self.nodes:
             xmlnode = grxml.createElement('node')
-            xmlnode.setAttribute('id', unicode(node.id))
-            xmlnode.setAttribute('type', unicode(node.fullname()))
+            xmlnode.setAttribute('id', str(node.id))
+            xmlnode.setAttribute('type', str(node.fullname()))
             grxmlr.appendChild(xmlnode)
 
             # Graphical properties
@@ -396,11 +396,11 @@ class Interface(object):
         """
         return self.__class__.__name__
 
-    def __str__(self):
-        return repr(self)
+    #def __str__(self):
+    #    return repr(self)
 
-    def __repr__(self):
-        return str(unicode(self))
+    #def __repr__(self):
+    #    return '{}'.format(self)
 
     def __unicode__(self):
         return u"%s::%s" % (self.node, self.fullname)
@@ -564,7 +564,7 @@ class Node(object):
         try:
             self.run()
             self.debug(_("Done."))
-        except Exception, e:
+        except Exception as e:
             self.exception(e)
 
         self.running = False
